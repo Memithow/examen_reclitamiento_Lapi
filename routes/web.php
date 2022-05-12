@@ -12,15 +12,22 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
 Route::get('/', function () {
-    return view('welcome');
+    if(!auth()->user())
+        return view('welcome');
+    else
+        return redirect('home');
 });
 
-Auth::routes();
+Route::group(['middleware' => 'auth', 'namespace' => 'App\Http\Controllers'], function () {
+    Route::get('home', 'HomeController@index')->name('home');
+    Route::get('registros-aleatorios', 'HomeController@registrosAleatorios')->name('registrosAleatorios');
+    Route::get('mensajes-administrador', 'HomeController@mensajesGuardados')->name('mensajesGuardados');
+    Route::get('mensajes-automaticos', 'HomeController@mensajesAutomaticos')->name('mensajesAutomaticos');
+    Route::get('tareas_programadas', 'HomeController@tareasProgramadas')->name('tareasProgramadas');
+    Route::post('guardar-mensaje', 'HomeController@guardarMensaje')->name('guardarMensaje');
+});
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
