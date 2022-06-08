@@ -28,6 +28,15 @@ Route::group(['middleware' => 'auth', 'namespace' => 'App\Http\Controllers'], fu
     Route::get('mensajes-automaticos', 'HomeController@mensajesAutomaticos')->name('mensajesAutomaticos');
     Route::get('tareas_programadas', 'HomeController@tareasProgramadas')->name('tareasProgramadas');
     Route::post('guardar-mensaje', 'HomeController@guardarMensaje')->name('guardarMensaje');
+
+
+    Route::resource('empleados', 'Empleados');
+
+    Route::group(['prefix'=>'reportes','as'=>'reportes.'], function (){
+        Route::get('pdf', 'Empleados@downloadPDF')->name('downloadPDF');
+        Route::get('excel', 'Empleados@downloadExcel')->name('dowloadExcel');
+    });
+
 });
 
 
